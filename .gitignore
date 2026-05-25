@@ -1,0 +1,16 @@
+# Virtual environments
+venv/
+env/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Database
+database.db
+instance/
+
+# Environment Variables
+.env
+.flaskenv

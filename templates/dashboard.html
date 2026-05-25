@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex flex-col mx-auto p-4 max-w-md w-full animate-fade-in" style="min-height: 100vh; padding-top: 40px;">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl" style="margin: 0; font-weight: 600; font-size: 1.5rem;">Dashboard</h1>
+    <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="font-size: 0.9rem; color: var(--text-secondary);">{{ current_user.email.split('@')[0] }}</span>
+        <a href="{{ url_for('logout') }}" style="color: var(--text-primary); text-decoration: none; font-weight: 500; font-size: 0.9rem;">
+        Logout
+        </a>
+    </div>
+  </div>
+
+  <div class="glass-card mb-6 flex items-center gap-4" style="padding: 16px;">
+    <div style="font-size: 20px;">🔔</div>
+    <div>
+      <p style="margin: 0; font-weight: 600; font-size: 0.95rem;">Notifications Active</p>
+      <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary);">You will be reminded if you miss a log.</p>
+    </div>
+  </div>
+
+  {% if is_submitted %}
+    <div class="glass-card text-center animate-fade-in">
+      <div style="font-size: 32px; color: var(--success); margin: 0 auto 12px auto;">✓</div>
+      <h2 style="margin: 0 0 8px 0; font-size: 1.25rem;">All caught up!</h2>
+      <p class="text-secondary" style="margin: 0; font-size: 0.95rem;">You've submitted your work log for today.</p>
+    </div>
+  {% else %}
+    <div class="glass-card">
+      <h2 style="margin: 0 0 20px 0; font-size: 1.1rem; font-weight: 600;">Today's Log</h2>
+      <form method="POST" class="flex flex-col gap-4">
+        <div>
+          <label class="label">What did you accomplish today?</label>
+          <textarea name="done_today" class="input-field" placeholder="Summarize your progress..." required></textarea>
+        </div>
+
+        <div>
+          <label class="label">What tasks were assigned to you?</label>
+          <textarea name="assigned_work" class="input-field" placeholder="List any new or ongoing assignments..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary mt-4">Submit Update</button>
+      </form>
+    </div>
+  {% endif %}
+
+  {% if past_logs %}
+    <div style="margin-top: 40px; margin-bottom: 40px;">
+      <h2 style="font-size: 1rem; margin: 0 0 16px 0; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Recent Logs</h2>
+      <div class="flex flex-col gap-4">
+        {% for log in past_logs %}
+          <div class="glass-card" style="padding: 24px;">
+            <p style="margin: 0 0 16px 0; font-weight: 500; font-size: 0.95rem; color: var(--text-secondary);">
+              {{ log.date_str }}
+            </p>
+            <div style="margin-bottom: 16px;">
+              <p style="margin: 0 0 6px 0; font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Accomplished</p>
+              <p style="margin: 0; font-size: 0.95rem; line-height: 1.6; color: var(--text-primary);">{{ log.done_today }}</p>
+            </div>
+            <div>
+              <p style="margin: 0 0 6px 0; font-size: 0.85rem; color: var(--text-secondary); font-weight: 500;">Assigned</p>
+              <p style="margin: 0; font-size: 0.95rem; line-height: 1.6; color: var(--text-primary);">{{ log.assigned_work }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
